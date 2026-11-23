@@ -21,4 +21,17 @@ const getAllJobs=async(userId)=>{
 
        return jobs
 }
-module.exports={createJob, getAllJobs}
+
+const getOneJob=async(jobId,userId)=>{
+
+    const job=await Job.findOne({_id:jobId,
+                                 user:userId})
+
+    if(!job){
+        throw new Error("Job not found!!")
+    }
+
+    return job
+}
+
+module.exports={createJob, getAllJobs,getOneJob}

@@ -40,4 +40,25 @@ const getAllJobs=async(req,res)=>{
       
 }
 
-module.exports={addNewJob,getAllJobs}
+const getOneJob=async(req,res)=>{
+   try{
+    const jobId=req.params.id;
+    const userId=req.user.userId
+
+    const job=await jobService.getOneJob(jobId,userId)
+
+     res.status(200).json({
+        status:true,
+        data:job
+     })
+   }
+   catch(error){
+    res.status(500).json({
+        message:'Something wrong ',
+    error:error.message
+    })
+   }
+
+}
+
+module.exports={addNewJob,getAllJobs,getOneJob}
