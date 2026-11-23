@@ -61,4 +61,44 @@ const getOneJob=async(req,res)=>{
 
 }
 
-module.exports={addNewJob,getAllJobs,getOneJob}
+
+const updateJob=async(req,res)=>{
+    try{
+        const jobId=req.params.id
+            const updatedData=req.body;
+
+            const job=await jobService.updateJob(jobId,req.user.userId,updatedData)
+
+            res.status(200).json({
+                status:true,
+                data:job,
+                message:'job updated successfully'
+            })
+    }
+    catch(error){
+        res.status(500).json({
+            status:false,
+            message:"something went wrong",
+            error:error.message
+        })
+    }
+}
+const deleteJob=async(req,res)=>{
+    try{
+
+      await jobService.deleteJob(req.params.id,req.user.userId)
+
+       res.status(200).json({
+                status:true,
+                message:'job deleted successfully'
+            })
+    }
+    catch(error){
+        res.status(500).json({
+            status:false,
+            message:"something went wrong",
+            error:error.message
+        })
+    }
+}
+module.exports={addNewJob,getAllJobs,getOneJob,updateJob,deleteJob}

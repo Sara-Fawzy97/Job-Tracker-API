@@ -34,4 +34,37 @@ const getOneJob=async(jobId,userId)=>{
     return job
 }
 
-module.exports={createJob, getAllJobs,getOneJob}
+const updateJob=async (jobId,userId,jobData)=>{
+    const {company,position,status,location}=jobData
+
+    const updates={}
+
+    if(company !==undefined) updates.company=company;
+    if(position !==undefined) updates.position=position;
+    if(status !==undefined) updates.status=status;
+    if(location !==undefined) updates.location=location;
+
+    const job= await Job.findOneAndUpdate({_id:jobId,user:userId},updates, {
+            new: true,
+            runValidators: true
+        })
+
+        if(!job){
+            throw new Error('job not found')
+        }
+
+        return job
+}
+
+const deleteJob=async (jobId,userId)=>{
+ const job=await Job.findOneAndDelete({_id:jobId,user:userId})   
+ 
+ 
+        if(!job){
+            throw new Error('job not found')
+        }
+
+        return job
+}
+
+module.exports={createJob, getAllJobs,getOneJob,updateJob,deleteJob}
