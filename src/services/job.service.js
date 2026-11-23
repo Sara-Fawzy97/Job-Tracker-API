@@ -14,4 +14,11 @@ const {company,position, status,location}=jobData
   
     return job;
 }
-module.exports={createJob}
+
+
+const getAllJobs=async(userId)=>{
+       const jobs=await Job.find({user:userId}).sort({createdAt:-1})
+
+       return jobs
+}
+module.exports={createJob, getAllJobs}
