@@ -99,4 +99,26 @@ const updateProfile = async (req, res) => {
     }
 }
 
-module.exports = { register, login, getProfile, updateProfile }
+const changePassword=async(req,res)=>{
+    
+    try{
+        const {currentPassword,newPassword}=req.body
+         await authService.changePassword(
+            req.user.userId,currentPassword,newPassword
+         )
+        res.status(200).json({
+            success:true,
+            message:'Password changed successfully',
+            
+        })
+    }
+    catch(error){
+        res.status(500).json({
+            message:'Something wrong',
+            error:error.message
+        })
+    }
+    
+}
+
+module.exports = { register, login, getProfile, updateProfile ,changePassword}

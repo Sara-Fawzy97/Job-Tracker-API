@@ -75,4 +75,25 @@ const updateProfile = async ( userId,updatedData) => {
   return user;
 }
 
-module.exports = { register, login, getProfile, updateProfile }
+const changePassword=async(userId,currentPassword,newPassword)=>{
+          const user =await User.findById(userId).select('+password')
+
+          if(!user){
+            throw new Error ('User not found !!')
+          }
+
+          const isPasswordMatched= await user.comparePassword(currentPassword)
+
+          if(!isPasswordMatched){
+            throw new Error ('password is incorrect')
+          }
+
+          user.password=newPassword
+
+          await user.save()
+
+          return user;
+}
+
+
+module.exports = { register, login, getProfile, updateProfile,changePassword }
