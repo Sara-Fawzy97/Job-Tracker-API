@@ -24,7 +24,7 @@ const addNewJob=async (req,res)=>{
 
 const getAllJobs=async(req,res)=>{
       try{
-        const jobs=await jobService.getAllJobs(req.user.userId)
+        const jobs=await jobService.getAllJobs(req.user.userId,req.query)
         res.status(200).json({
             success:true,
             results:jobs.length,
