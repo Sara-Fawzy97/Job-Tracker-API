@@ -20,6 +20,8 @@ const getAllJobs = async (userId, filters) => {
     const query = {
         user: userId,
     }
+
+    let sortItem = {}
     //search
     if (filters.search) {
         query.$or = [
@@ -43,15 +45,35 @@ const getAllJobs = async (userId, filters) => {
         ]
     }
 
-//filter by status
+    //filter by status
     if (filters.status) {
         query.status = filters.status
     }
 
-    const jobs = await Job.find(query).sort({ createdAt: -1 })
+    // for sorting
+    if (filters.sort === "oldest") {
+        sortItem.createdAt = 1; //Ascending order
+    } else if (filters.sort === "company") {
+        sortItem.company = 1;
+    } else sortItem.createdAt = -1  //Descending order
 
-    return jobs
+
+    //pagination
+
+    const page = Math.max(1, Number(filters.page)) || 1;
+    const requestedLimit = Math.max(1,Number(filters.limit)) || 10;
+const limit=Math.min(50,requestedLimit)
+    const skip = (page - 1) * limit;
+    const totalJobs = await Job.countDocuments(query);
+    const totalPages = Math.ceil(totalJobs / limit)
+
+    const jobs = await Job.find(query).sort(sortItem).skip(skip).limit(limit)
+
+
+    return { jobs, totalJobs, totalPages, currentPage: page }
 }
+
+
 
 const getOneJob = async (jobId, userId) => {
 

@@ -28,7 +28,7 @@ const getAllJobs=async(req,res)=>{
         res.status(200).json({
             success:true,
             results:jobs.length,
-            data:jobs
+            ...jobs
         })
       }
         catch(error){
